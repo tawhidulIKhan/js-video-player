@@ -14,10 +14,10 @@ class VideoPlayer {
   toggler = "toggler";
   video = null;
   videoStatus = "paused";
-
+  duration = '00:00';
   constructor(args) {
     this.videoId = args.id;
-    this.videoWidth = args.width || 600;
+    // this.videoWidth = args.width || 100;
     this.videoHeight = args.height || 400;
     this.videoLink = args.link || "#";
     this.run();
@@ -29,7 +29,6 @@ class VideoPlayer {
     const controls = this.createControls();
     player.appendChild(this.video);
     player.appendChild(controls);
-
     this.toggleHandler();
   };
 
@@ -59,10 +58,20 @@ class VideoPlayer {
 
   createVideo = () => {
     const video = document.createElement("video");
+    video.preload = 'metadata';
     video.id = "video";
-    video.width = this.videoWidth;
     video.height = this.videoHeight;
     video.src = this.videoLink;
+
+    video.onloadedmetadata = () => {
+        this.duration = video.duration;
+        let duration = document.getElementById("duration");
+        let minutes = parseInt(video.duration / 60);
+        let seconds = parseInt(video.duration % 60);
+        let minutesValue = minutes < 10 ? `0${minutes}` : minutes;
+        let secondsValue = seconds < 10 ? `0${seconds}` : seconds;
+        duration.innerHTML = `${minutesValue}:${secondsValue}`;
+    }
     return video;
   };
 
@@ -75,6 +84,7 @@ class VideoPlayer {
     controlsContent += this.getProgress();
     controlsContent += this.getBackward();
     controlsContent += this.getForward();
+    controlsContent += this.getDuration();
     controls.innerHTML = controlsContent;
     return controls;
   };
@@ -117,11 +127,15 @@ class VideoPlayer {
     const timer = ` <div id="timer" class="timer">00:00</div>`;
     return timer;
   };
+
+  getDuration = () => {
+    const duration = ` <div id="duration" class="duration">00:00</div>`;
+    return duration;
+  };
 }
 
 const video = new VideoPlayer({
   id: "#video-player",
-  width: 600,
   link: "media/sample.mp4",
 });
 

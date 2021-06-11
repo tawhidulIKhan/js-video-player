@@ -1,4 +1,8 @@
 
+#video{
+    object-fit: cover;
+    width:100%;
+}
 .video-player{
     position: relative;
 }
@@ -18,11 +22,13 @@
     min-height: 50px;
     display: flex;
     align-items: center;
-    padding:0 20px;
+    grid-gap: 20px;
+    /* padding:0 20px; */
 }
 .video-controls .timer{
     color:#fff;
     margin-right: 20px;
+    margin-left: 20px;
 }
 
 .video-controls .progress{
